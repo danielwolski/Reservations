@@ -20,10 +20,16 @@ public class UserService {
     }
 
     public String registerUser(User user) {
-        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
-        if (existingUser.isPresent()) {
+        Optional<User> userExistingByUsername = userRepository.findByUsername(user.getUsername());
+        if (userExistingByUsername.isPresent()) {
             throw new IllegalArgumentException("Username is already taken");
         }
+
+        Optional<User> userExistingByEmail = userRepository.findByEmail(user.getEmail());
+        if (userExistingByEmail.isPresent()) {
+            throw new IllegalArgumentException("Email is already taken");
+        }
+        
 
         user.setPassword(passwordEncoder.encode(user.getPassword())); 
         userRepository.save(user);

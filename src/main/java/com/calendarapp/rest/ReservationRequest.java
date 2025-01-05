@@ -2,6 +2,7 @@ package com.calendarapp.rest;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,5 @@ public class ReservationRequest {
     private Long userId;
     private Long tableId;
     private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private List<LocalTime> slotStartTimes;
 }

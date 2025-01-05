@@ -33,9 +33,6 @@ public class Reservation {
     private LocalDate date;
 
     @Column(nullable = false)
-    private LocalTime startTime;
-
-    @Column(nullable = false)
-    private LocalTime endTime;
+    private LocalTime slotStartTime;
 }
 
