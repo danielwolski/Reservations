@@ -1,5 +1,8 @@
 package com.calendarapp.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +40,9 @@ public class UserController {
         boolean isValid = userService.validateUserCredentials(user.getUsername(), user.getPassword());
         if (isValid) {
             String token = jwtService.generateToken(user.getUsername());
-            return ResponseEntity.ok(token); 
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+         return ResponseEntity.ok(response); 
         } else {
             return ResponseEntity.status(401).body("Invalid credentials");
         }

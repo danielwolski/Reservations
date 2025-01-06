@@ -1,0 +1,47 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <div class="event-details">
+      <h2>{{ selectedDate }}</h2>
+      <button class="green-button" (click)="openAddEventFormModal()">Add new event</button>
+    </div>
+
+    <table class="events-table" *ngIf="eventDetails.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of eventDetails; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ event.title }}</td>
+          <td>{{ getTime(event.startTime) }}</td>
+          <td>{{ getTime(event.endTime) }}</td>
+          <td>{{ event.description }}</td>
+          <td>
+            <button class="delete-button" (click)="removeEvent(event.id)">
+              <span class="icon-trash"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="eventDetails.length === 0" class="no-objects-message">No events for this day.</p>
+
+    <button class="close-button" (click)="close()">Close</button>
+    
+  </div>
+</div>
+
+<app-add-event-modal
+  [isVisible]="isAddEventFormVisible"
+  [selectedDate] ="selectedDate"
+  (closeModal)="closeAddEventFormModal()"
+></app-add-event-modal>

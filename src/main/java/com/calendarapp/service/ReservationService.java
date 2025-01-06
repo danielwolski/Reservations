@@ -24,7 +24,7 @@ import com.calendarapp.rest.ReservationRequest;
 @Service
 public class ReservationService {
     private final static int DAY_START = 12;
-    private final static int DAY_END = 12;
+    private final static int DAY_END = 24;
     private final static int SLOT_IN_MINUTES = 30;
 
     private final ReservationRepository reservationRepository;

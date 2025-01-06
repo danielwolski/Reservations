@@ -1,0 +1,109 @@
+* {
+  font-family: Arial, sans-serif;
+}
+
+.close-button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: rgb(170, 18, 18);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+.close-button:hover {
+    background-color: #69111a;
+  }
+
+.green-button {
+    margin-top: 20px;
+    margin-left: 70%;
+    padding: 10px;
+    background-color: rgb(75, 1, 248);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+.green-button:hover {
+    background-color: rgb(47, 0, 158);
+  }
+
+.icon-trash {
+   background-image: url('assets/trash.png');
+   background-size: contain;
+   background-repeat: no-repeat;
+   width: 20px;
+   height: 20px;
+   display: inline-block;
+   cursor: pointer;
+   background-position: center;
+  }
+
+.icon-tasks {
+    background-image: url('assets/task.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    cursor: pointer;
+    background-position: center;
+}
+
+.icon-task-done {
+  background-image: url('assets/task-done.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  cursor: pointer;
+  background-position: center;
+}
+
+.icon-task-not-done {
+  background-image: url('assets/task-not-done.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  cursor: pointer;
+  background-position: center;
+}
+
+.icon-calendar {
+  background-image: url('assets/calendar.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  cursor: pointer;
+  background-position: center;
+}
+
+.icon-logout {
+  background-image: url('assets/logout.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  cursor: pointer;
+  background-position: center;
+}
+
+.invalid-input {
+  border: 2px solid red;
+}
+
+.no-objects-message {
+  text-align: center;
+  margin-top: 20px;
+  color: #999;
+  font-style: italic;
+}
