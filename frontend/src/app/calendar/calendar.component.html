@@ -21,11 +21,6 @@
       (click)="openEventDetails(day)"
     >
       <div class="day-number">{{ day.getDate() }}</div>
-      <div class="events">
-        <div class="event" *ngFor="let event of getEventsForDay(day)">
-          {{ getTime(event.startTime) + " - " + getTime(event.endTime) + " " + event.title }}
-        </div>
-      </div>
 
     </div>
   </div>

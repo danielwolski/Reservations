@@ -23,6 +23,14 @@ export class AuthService {
     return localStorage.getItem('jwtToken');
   }
 
+  saveUsername(username: any) {
+    localStorage.setItem('username', username);
+  }
+
+  getUsername(): string | null {
+    return localStorage.getItem('username');
+  }
+
   isAuthenticated(): boolean {
     return this.getToken() !== null;
   }

@@ -3,39 +3,27 @@
 
     <div class="event-details">
       <h2>{{ selectedDate }}</h2>
-      <button class="green-button" (click)="openAddEventFormModal()">Add new event</button>
+      
     </div>
 
-    <table class="events-table" *ngIf="eventDetails.length > 0">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Description</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let event of eventDetails; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ event.title }}</td>
-          <td>{{ getTime(event.startTime) }}</td>
-          <td>{{ getTime(event.endTime) }}</td>
-          <td>{{ event.description }}</td>
-          <td>
-            <button class="delete-button" (click)="removeEvent(event.id)">
-              <span class="icon-trash"></span>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p *ngIf="eventDetails.length === 0" class="no-objects-message">No events for this day.</p>
-
+    <div *ngFor="let table of reservations?.tableReservationSlots" class="table-section">
+      <h3>Table {{ table.tableId }}</h3>
+      <div class="slot-buttons">
+        <button
+          *ngFor="let slot of table.reservationSlots"
+          [class.available]="slot.available"
+          [class.unavailable]="!slot.available"
+          [disabled]="!slot.available"
+          (click)="toggleSlotSelection(table.tableId, slot.startTime)"
+        >
+          {{ slot.startTime }}
+        </button>
+      </div>
+    </div>
+    
     <button class="close-button" (click)="close()">Close</button>
+
+    <button class="green-button" (click)="openAddEventFormModal()">Add new reservation</button>
     
   </div>
 </div>

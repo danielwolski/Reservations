@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventService } from '../services/event.service';
+import { ReservationService } from '../services/event.service';
 import { ModalComponent } from '../modal/modal.component';
-import { Event } from '../models/event.model';
 
 @Component({
   selector: 'app-calendar',
@@ -22,21 +21,14 @@ export class CalendarComponent implements OnInit {
   isModalVisible: boolean = false;
   selectedDate: string = '';
 
-  constructor(private eventService: EventService
+  constructor(private eventService: ReservationService
   ) {}
 
   ngOnInit(): void {
     this.generateDaysInMonth();
-    this.loadEvents();
 
-    this.eventService.eventsUpdated$.subscribe(() => {
-      this.loadEvents();
-    });
-  }
-
-  loadEvents(): void {
-    this.eventService.getEvents().subscribe((data: Event[]) => {
-      this.events = data;
+    this.eventService.reservationsUpdated$.subscribe(() => {
+      console.log("reservations updated")
     });
   }
 
@@ -87,17 +79,6 @@ export class CalendarComponent implements OnInit {
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear()
     );
-  }
-
-  getEventsForDay(day: Date): Event[] {
-    return this.events.filter((event) => {
-      const eventDate = new Date(event.startTime);
-      return (
-        eventDate.getDate() === day.getDate() &&
-        eventDate.getMonth() === day.getMonth() &&
-        eventDate.getFullYear() === day.getFullYear()
-      );
-    });
   }
 
   openEventDetails(date: Date): void {

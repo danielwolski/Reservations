@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.calendarapp.rest.DailyReservations;
 import com.calendarapp.rest.ReservationRequest;
 import com.calendarapp.service.ReservationService;
 
@@ -25,9 +26,9 @@ public class ReservationController {
     }
 
     @GetMapping("/{date}")
-    public ResponseEntity<Map<Integer, List<String>>> getAvailableSlots(@PathVariable("date") String date) {
+    public ResponseEntity<DailyReservations> getSlots(@PathVariable("date") String date) {
         LocalDate reservationDate = LocalDate.parse(date);
-        Map<Integer, List<String>> availability = reservationService.getAvailableSlots(reservationDate);
+        DailyReservations availability = reservationService.getSlots(reservationDate);
         return ResponseEntity.ok(availability);
     }
 

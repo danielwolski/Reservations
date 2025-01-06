@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EventService } from '../services/event.service';
-import { CreateEventRequest } from '../models/event.model';
+import { ReservationService } from '../services/event.service';
+import { CreateReservation } from '../models/event.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -16,14 +16,15 @@ export class AddEventModalComponent {
   @Input() selectedDate: string = '';
   @Output() closeModal: EventEmitter<void> = new EventEmitter(); 
 
-  eventRequest: CreateEventRequest = {
-    title: '',
-    startTime: '',
-    endTime: '',
-    description: '',
-  };
+  // reservationRequest: CreateReservation = {
+    // username = '',
+    // tableId: 0,
+    // startTime: '',
+    // endTime: '',
+    // description: '',
+  // };
 
-  constructor(private eventService: EventService
+  constructor(private eventService: ReservationService
   ) {}
   
   close(): void {
@@ -31,19 +32,19 @@ export class AddEventModalComponent {
   }
 
   confirmCreateEvent(): void {
-    this.eventService.addEvent(this.eventRequest, this.selectedDate).subscribe({
-      next: (response) => {
-        console.log('Event created:', response);
-      },
-      error: (err) => {
-        console.error('Error during creating event:', err);
-      },
-    });
+    // this.eventService.addReservation(this.reservationRequest, this.selectedDate).subscribe({
+    //   next: (response) => {
+    //     console.log('Event created:', response);
+    //   },
+    //   error: (err) => {
+    //     console.error('Error during creating event:', err);
+    //   },
+    // });
     this.clearAddEventFormInput();
   }
 
   clearAddEventFormInput(): void {
-    this.eventRequest.title = '';
-    this.eventRequest.description = '';
+    // this.reservationRequest.title = '';
+    // this.reservationRequest.description = '';
   }  
 }

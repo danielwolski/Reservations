@@ -18,13 +18,16 @@ import com.calendarapp.model.User;
 import com.calendarapp.repository.ReservationRepository;
 import com.calendarapp.repository.TableRepository;
 import com.calendarapp.repository.UserRepository;
+import com.calendarapp.rest.DailyReservations;
 import com.calendarapp.rest.ReservationRequest;
+import com.calendarapp.rest.ReservationSlot;
+import com.calendarapp.rest.TableReservationSlots;
 
 
 @Service
 public class ReservationService {
     private final static int DAY_START = 12;
-    private final static int DAY_END = 24;
+    private final static int DAY_END = 22;
     private final static int SLOT_IN_MINUTES = 30;
 
     private final ReservationRepository reservationRepository;
@@ -39,41 +42,49 @@ public class ReservationService {
         this.userRepository = userRepository;
     }
 
-    public Map<Integer, List<String>> getAvailableSlots(LocalDate date) {
+    public DailyReservations getSlots(LocalDate date) {
         List<Table> tables = tableRepository.findAll();
-        Map<Integer, List<String>> availability = new HashMap<>();
+        DailyReservations dailyReservations = new DailyReservations();
+        dailyReservations.setDate(date.toString());
+
+        List<TableReservationSlots> tableReservationSlotsList = new ArrayList<>();
+
+        List<Reservation> reservations = reservationRepository.findByDate(date);
 
         for (Table table : tables) {
-            List<Reservation> reservations = reservationRepository.findReservationsByDateAndTable(date, table);
-            List<String> slots = generateAvailableSlots(reservations);
-            availability.put(table.getNumber(), slots);
+            TableReservationSlots tableReservationSlots = new TableReservationSlots();
+            tableReservationSlots.setTableId(table.getId().intValue());
+
+            List<ReservationSlot> reservationSlots = new ArrayList<>();
+
+            for (int hour = DAY_START; hour < DAY_END; hour++) {
+                for (int minute = 0; minute < 60; minute += SLOT_IN_MINUTES) {
+                    LocalTime slotStartTime = LocalTime.of(hour, minute);
+                    
+                    boolean isAvailable = true;
+
+                    for (Reservation reservation : reservations) {
+                        if (reservation.getTable().equals(table) && reservation.getSlotStartTime().equals(slotStartTime)) {
+                            isAvailable = false;
+                            break;
+                        }
+                    }
+
+                    ReservationSlot reservationSlot = new ReservationSlot();
+                    reservationSlot.setStartTime(slotStartTime.toString());
+                    reservationSlot.setAvailable(isAvailable);
+
+                    reservationSlots.add(reservationSlot);
+                }
+            }
+
+            tableReservationSlots.setReservationSlots(reservationSlots);
+            tableReservationSlotsList.add(tableReservationSlots);
         }
-        return availability;
+        dailyReservations.setTableReservationSlots(tableReservationSlotsList);
+        return dailyReservations;
     }
 
-    private List<String> generateAvailableSlots(List<Reservation> reservations) {
-        List<String> slots = new ArrayList<>();
-        LocalTime start = LocalTime.of(DAY_START, 0);
-        LocalTime end = LocalTime.of(DAY_END, 0);
-    
-        Map<LocalTime, Boolean> slotAvailability = new HashMap<>();
-    
-        for (Reservation reservation : reservations) {
-            LocalTime reservationStart = reservation.getSlotStartTime();
-    
-            slotAvailability.put(reservationStart, true);
-        }
-    
-        while (start.isBefore(end)) {
-            LocalTime slotEnd = start.plusMinutes(SLOT_IN_MINUTES);
-            final LocalTime slotStart = start;
-            boolean isAvailable = !slotAvailability.containsKey(slotStart); 
-            slots.add(slotStart + "-" + slotEnd + (isAvailable ? " Available" : " Reserved"));
-            start = slotEnd; 
-        }
-
-        return slots;
-    }
 
     public String createReservation(ReservationRequest request) {
         Table table = tableRepository.findById(request.getTableId())
@@ -87,7 +98,7 @@ public class ReservationService {
             }
         }
 
-        Optional<User> currentUser = userRepository.findById(request.getUserId());
+        Optional<User> currentUser = userRepository.findByUsername(request.getUsername());
 
         if (currentUser.isPresent()) {
             for (LocalTime startTime : request.getSlotStartTimes()) {

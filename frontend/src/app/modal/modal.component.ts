@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddEventModalComponent } from '../add-event-modal/add-event-modal.component';
-import { EventDetails } from '../models/event.model';
-import { EventService } from '../services/event.service';
+import { ReservationService } from '../services/event.service';
+import { DailyReservations } from '../models/event.model';
 
 @Component({
   selector: 'app-modal',
@@ -19,22 +19,37 @@ export class ModalComponent implements OnInit, OnChanges {
   @Input() selectedDate: string = '';  
   @Output() closeModal: EventEmitter<void> = new EventEmitter(); 
 
-  eventDetails: EventDetails[] = [];
+  reservations: DailyReservations | undefined;
   isAddEventFormVisible: boolean = false;
+  selectedSlots: { [tableId: number]: Set<string> } = {};
 
-  constructor(private eventService: EventService
+  constructor(private eventService: ReservationService
   ) {}
 
   ngOnInit(): void {
-    this.eventService.eventsUpdated$.subscribe(() => {
-      this.loadEventDetails();
+    this.eventService.reservationsUpdated$.subscribe(() => {
+      this.loadReservationsForADay();
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isVisible'] && changes['isVisible'].currentValue === true) {
-      this.loadEventDetails();
+      this.loadReservationsForADay();
     }
+  }
+
+  toggleSlotSelection(tableId: number, startTime: string): void {
+    if (!this.selectedSlots[tableId]) {
+      this.selectedSlots[tableId] = new Set<string>();
+    }
+  
+    if (this.selectedSlots[tableId].has(startTime)) {
+      this.selectedSlots[tableId].delete(startTime);
+    } else {
+      this.selectedSlots[tableId].add(startTime);
+    }
+  
+    console.log('Selected slots:', this.selectedSlots);
   }
 
   close(): void {
@@ -43,16 +58,18 @@ export class ModalComponent implements OnInit, OnChanges {
 
   openAddEventFormModal(): void {
     this.isAddEventFormVisible = true;
-    this.loadEventDetails();
   }
 
   closeAddEventFormModal(): void {
     this.isAddEventFormVisible = false;
   }
 
-  loadEventDetails(): void {
-    this.eventService.getEventDetailsByDay(this.selectedDate)?.subscribe((data: EventDetails[]) => {
-      this.eventDetails = data;
+  loadReservationsForADay(): void {
+    this.eventService.getEventDetailsByDay(this.selectedDate)?.subscribe((data: DailyReservations) => {
+      this.reservations = data;
+      console.log('Reservations:', this.reservations);
+console.log('Type:', typeof this.reservations);
+
     });
   }
 

@@ -1,22 +1,21 @@
-export interface Event {
-    id: number;
-    title: string;
-    startTime: string;
-    endTime: string;
+export interface DailyReservations {
+  date: string;
+  tableReservationSlots: TableReservationSlots[];
 }
 
-export interface EventDetails {
-  id: number;
-  title: string;
+export interface TableReservationSlots {
+  tableId: number;
+  reservationSlots: ReservationSlot[];
+}
+
+export interface ReservationSlot {
   startTime: string;
-  endTime: string;
-  description: string;
+  available: boolean;
 }
 
-export interface CreateEventRequest {
-    title: string;
-    startTime: string;
-    endTime: string;
-    description: string;
+export interface CreateReservation {
+    username: string;
+    tableId: number;
+    date: string;
+    slotStartTimes: string[];
 }
-  

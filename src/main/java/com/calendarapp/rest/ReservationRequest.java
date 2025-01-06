@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReservationRequest {
-    private Long userId;
+    private String username;
     private Long tableId;
     private LocalDate date;
     private List<LocalTime> slotStartTimes;
