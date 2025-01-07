@@ -44,6 +44,11 @@
     color: white;
     cursor: not-allowed;
   }
+
+  button.selected {
+    background-color: #d4c32b;
+    color: white;
+  }
   
   button:disabled {
     opacity: 0.6;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, tap } from 'rxjs';
+import { catchError, Observable, of, Subject, tap } from 'rxjs';
 import { CreateReservation, DailyReservations } from '../models/event.model';
 import { AuthService } from '../authorization/auth.service';
 
@@ -16,9 +16,6 @@ export class ReservationService {
 
   constructor(private authService: AuthService, private http: HttpClient) {}
 
-  // getEvents(): Observable<Event[]> {
-  //   return this.http.get<Event[]>(this.apiUrl);
-  // }
 
   getEventDetailsByDay(day: string): Observable<DailyReservations> | null {
     if (day != '' && day != null) {
@@ -28,15 +25,21 @@ export class ReservationService {
     }
   }
 
-  addReservation(request: CreateReservation, date: string): Observable<CreateReservation> {
+  addReservation(request: CreateReservation, date: string): Observable<CreateReservation | null> {
     const username = this.authService.getUsername();
     const reservationRequestToSend = {
       ...request,
       username: username,
       date: date
     };
+    console.log("Sent reservation request: ", reservationRequestToSend);
+
     return this.http.post<CreateReservation>(this.apiUrl, reservationRequestToSend).pipe(
-      tap(() => this.reservationsUpdatedSubject.next())
+      tap(response => console.log("Received response:", response)),
+      catchError(error => {
+        console.error("Error occurred while making reservation request", error);
+        return of(null); 
+      })
     );
   }
 

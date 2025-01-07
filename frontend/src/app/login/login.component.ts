@@ -21,7 +21,7 @@ export class LoginComponent {
     this.authService.login(this.username, this.password).subscribe({
       next: response => {
         this.authService.saveToken(response.token);
-        this.authService.saveUsername(response.username);
+        this.authService.saveUsername(this.username);
         this.router.navigate(['/events-list']);
       },
       error: err => {

@@ -13,6 +13,7 @@
           *ngFor="let slot of table.reservationSlots"
           [class.available]="slot.available"
           [class.unavailable]="!slot.available"
+          [class.selected]="isSlotSelected(table.tableId, slot.startTime)"
           [disabled]="!slot.available"
           (click)="toggleSlotSelection(table.tableId, slot.startTime)"
         >
@@ -23,13 +24,7 @@
     
     <button class="close-button" (click)="close()">Close</button>
 
-    <button class="green-button" (click)="openAddEventFormModal()">Add new reservation</button>
+    <button class="green-button" (click)="createReservation()">Add new reservation</button>
     
   </div>
 </div>
-
-<app-add-event-modal
-  [isVisible]="isAddEventFormVisible"
-  [selectedDate] ="selectedDate"
-  (closeModal)="closeAddEventFormModal()"
-></app-add-event-modal>
