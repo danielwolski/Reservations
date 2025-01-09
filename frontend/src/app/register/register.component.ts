@@ -19,22 +19,17 @@ export class RegisterComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onRegister() {
-    this.authService.login(this.username, this.password).subscribe({
-      next: response => {
-        this.authService.saveToken(response.token);
-        this.authService.saveUsername(this.username);
-        this.router.navigate(['/events-list']);
+    this.authService.register(this.email, this.username, this.password).subscribe({
+      next: () => {
+        this.goToLogin();
       },
       error: err => {
-        this.username = '';
-        this.password = '';
         this.errorMessage = err.error;
       }
     });
-  }
+  }  
 
   goToLogin() {
-    console.log("registergoto");
     this.router.navigate(['/login']);
   }
 }

@@ -28,8 +28,8 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
-            String response = userService.registerUser(user);
-            return ResponseEntity.ok(response);
+            userService.registerUser(user);
+            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

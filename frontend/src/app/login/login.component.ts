@@ -33,7 +33,6 @@ export class LoginComponent {
   }
 
   goToRegister() {
-    console.log("registergoto");
     this.router.navigate(['/register']);
   }
 }
