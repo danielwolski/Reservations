@@ -17,6 +17,10 @@ export class AppComponent {
     this.router.navigate(['/events-list']);
   }
 
+  goToMyReservations() {
+    this.router.navigate(['/myreservations']);
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);

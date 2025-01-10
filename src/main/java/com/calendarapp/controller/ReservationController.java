@@ -30,6 +30,13 @@ public class ReservationController {
         return ResponseEntity.ok(availability);
     }
 
+    @GetMapping("/{date}")
+    public ResponseEntity<DailyReservations> getReservationsByUser(@PathVariable("date") String date) {
+        LocalDate reservationDate = LocalDate.parse(date);
+        DailyReservations availability = reservationService.getSlots(reservationDate);
+        return ResponseEntity.ok(availability);
+    }
+
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequest request) {
         try {
