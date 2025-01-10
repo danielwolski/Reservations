@@ -1,17 +1,15 @@
-# CalendarApp Backend
-
-This repository contains the backend for the CalendarApp application, used to manage tasks and events. It's built using Java and Spring Boot.
+# Restaurant Table Reservations
 
 # Stack
 * **Language:** Java
 * **Framework:** Spring Boot
-* **Database:** PostgreSQL
+* **Database:** PostgreSQL, JPA
 * **Build tool:** Gradle
 
 # Local installation and setup
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/danielwolski/CalendarApp-Backend.git
+git clone https://github.com/danielwolski/Reservations-WIP.git
 ```
 2. **Start PostgreSQL in Docker:**
 

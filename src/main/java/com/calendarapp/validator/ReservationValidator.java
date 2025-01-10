@@ -12,6 +12,8 @@ import com.calendarapp.repository.ReservationRepository;
 import com.calendarapp.repository.TableRepository;
 import com.calendarapp.rest.ReservationRequest;
 
+import static  com.calendarapp.service.ReservationService.SLOT_SIZE_IN_MINUTES;
+
 @Component
 public class ReservationValidator {
 
@@ -33,6 +35,23 @@ public class ReservationValidator {
         for (LocalTime startTime : request.getSlotStartTimes()) {
             if (!isSlotAvailable(existingReservations, startTime)) {
                 throw new ReservationException("Slot " + startTime + " is not available for table ID: " + table.getId());
+            }
+        }
+    }
+
+    public void validateSlot(List<LocalTime> slotStartTimes) {
+        if (slotStartTimes.size() < 2 || slotStartTimes.size() > 4) {
+            throw new ReservationException("Reserve time slot between 1 and 2 hours");
+        }
+
+        slotStartTimes.sort(LocalTime::compareTo);
+
+        for (int i = 1; i < slotStartTimes.size(); i++) {
+            LocalTime previousSlot = slotStartTimes.get(i - 1);
+            LocalTime currentSlot = slotStartTimes.get(i);
+            
+            if (previousSlot.plusMinutes(SLOT_SIZE_IN_MINUTES).compareTo(currentSlot) != 0) {
+                throw new IllegalArgumentException("Slot times must be consecutive");
             }
         }
     }

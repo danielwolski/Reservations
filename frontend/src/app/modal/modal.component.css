@@ -53,4 +53,11 @@
   button:disabled {
     opacity: 0.6;
   }
+
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+  }
   

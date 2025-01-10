@@ -22,9 +22,10 @@ import com.calendarapp.rest.TableReservationSlots;
 
 @Service
 public class ReservationService {
+    public final static int SLOT_SIZE_IN_MINUTES = 30;
+    
     private final static int DAY_START = 12;
     private final static int DAY_END = 22;
-    private final static int SLOT_IN_MINUTES = 30;
 
     private final ReservationRepository reservationRepository;
     private final TableRepository tableRepository;
@@ -58,7 +59,7 @@ public class ReservationService {
             List<ReservationSlot> reservationSlots = new ArrayList<>();
 
             for (int hour = DAY_START; hour < DAY_END; hour++) {
-                for (int minute = 0; minute < 60; minute += SLOT_IN_MINUTES) {
+                for (int minute = 0; minute < 60; minute += SLOT_SIZE_IN_MINUTES) {
                     LocalTime slotStartTime = LocalTime.of(hour, minute);
                     
                     boolean isAvailable = true;
@@ -89,6 +90,7 @@ public class ReservationService {
     public void createReservation(ReservationRequest request) {   
         Table table = reservationValidator.validateAndGetTable(request.getTableId());
         reservationValidator.validateSlotAvailability(request, table);
+        reservationValidator.validateSlot(request.getSlotStartTimes());
         User currentUser = userValidator.validateAndGetUser(request.getUsername());
     
         for (LocalTime startTime : request.getSlotStartTimes()) {

@@ -22,6 +22,10 @@
       </div>
     </div>
     
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
     <button class="close-button" (click)="close()">Close</button>
 
     <button class="green-button" (click)="createReservation()">Add new reservation</button>

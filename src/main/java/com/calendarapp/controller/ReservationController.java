@@ -31,9 +31,12 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createReservation(
-            @RequestBody ReservationRequest request) {
-        reservationService.createReservation(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> createReservation(@RequestBody ReservationRequest request) {
+        try {
+            reservationService.createReservation(request);
+            return ResponseEntity.ok().build(); 
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 }

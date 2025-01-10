@@ -17,6 +17,8 @@ export class ModalComponent implements OnInit, OnChanges {
   @Input() selectedDate: string = '';  
   @Output() closeModal: EventEmitter<void> = new EventEmitter(); 
 
+  errorMessage = '';
+
   reservations: DailyReservations | undefined;
   isAddEventFormVisible: boolean = false;
   selectedSlots: { [tableId: number]: Set<string> } = {};
@@ -53,6 +55,7 @@ export class ModalComponent implements OnInit, OnChanges {
   close(): void {
     this.closeModal.emit();
     this.selectedSlots = {};
+    this.errorMessage = '';
   }
 
   createReservation(): void {
@@ -74,27 +77,25 @@ export class ModalComponent implements OnInit, OnChanges {
   
     if (reservations.length > 0) {
       reservations.forEach((reservation) => {
-        this.eventService.addReservation(reservation, this.selectedDate).subscribe(
-          response => {
-            console.log("Reservation successfully added", response);
+        this.eventService.addReservation(reservation, this.selectedDate).subscribe({
+          next: response => {
+            this.close(); 
           },
-          error => {
-            console.error("Error while making reservation request", error);
+          error: err => {
+            console.log(err.error)
+            this.errorMessage = err.error;
           }
-        );
+       });
       });
     }
     
     this.selectedSlots = {};
-    this.close(); 
   }
   
 
   loadReservationsForADay(): void {
     this.eventService.getEventDetailsByDay(this.selectedDate)?.subscribe((data: DailyReservations) => {
       this.reservations = data;
-      console.log('Reservations:', this.reservations);
-      console.log('Type:', typeof this.reservations);
     });
   }
 

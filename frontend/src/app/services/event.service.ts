@@ -25,22 +25,15 @@ export class ReservationService {
     }
   }
 
-  addReservation(request: CreateReservation, date: string): Observable<CreateReservation | null> {
+  addReservation(request: CreateReservation, date: string): Observable<CreateReservation> {
     const username = this.authService.getUsername();
     const reservationRequestToSend = {
       ...request,
       username: username,
       date: date
     };
-    console.log("Sent reservation request: ", reservationRequestToSend);
 
-    return this.http.post<CreateReservation>(this.apiUrl, reservationRequestToSend).pipe(
-      tap(response => console.log("Received response:", response)),
-      catchError(error => {
-        console.error("Error occurred while making reservation request", error);
-        return of(null); 
-      })
-    );
+    return this.http.post<any>(this.apiUrl, reservationRequestToSend);
   }
 
   removeEvent(eventId: number): Observable<void> {
