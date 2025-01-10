@@ -3,21 +3,17 @@ package com.calendarapp.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.calendarapp.model.Reservation;
 import com.calendarapp.model.Table;
 import com.calendarapp.model.User;
 import com.calendarapp.repository.ReservationRepository;
 import com.calendarapp.repository.TableRepository;
-import com.calendarapp.repository.UserRepository;
+import com.calendarapp.validator.ReservationValidator;
+import com.calendarapp.validator.UserValidator;
 import com.calendarapp.rest.DailyReservations;
 import com.calendarapp.rest.ReservationRequest;
 import com.calendarapp.rest.ReservationSlot;
@@ -32,14 +28,18 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final TableRepository tableRepository;
-    private final UserRepository userRepository;
+
+    private final ReservationValidator reservationValidator;
+    private final UserValidator userValidator;
 
     public ReservationService(ReservationRepository reservationRepository,
                               TableRepository tableRepository,
-                              UserRepository userRepository) {
+                              ReservationValidator reservationValidator,
+                              UserValidator userValidator) {
         this.reservationRepository = reservationRepository;
         this.tableRepository = tableRepository;
-        this.userRepository = userRepository;
+        this.reservationValidator = reservationValidator;
+        this.userValidator = userValidator;
     }
 
     public DailyReservations getSlots(LocalDate date) {
@@ -86,41 +86,18 @@ public class ReservationService {
     }
 
 
-    public String createReservation(ReservationRequest request) {
-        Table table = tableRepository.findById(request.getTableId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Table not found"));
-
-        List<Reservation> existingReservations = reservationRepository.findReservationsByDateAndTable(request.getDate(), table);
-        
+    public void createReservation(ReservationRequest request) {   
+        Table table = reservationValidator.validateAndGetTable(request.getTableId());
+        reservationValidator.validateSlotAvailability(request, table);
+        User currentUser = userValidator.validateAndGetUser(request.getUsername());
+    
         for (LocalTime startTime : request.getSlotStartTimes()) {
-            if (!isSlotAvailable(existingReservations, startTime)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Slot " + startTime + " is not available");
-            }
+            Reservation reservation = new Reservation();
+            reservation.setUser(currentUser);
+            reservation.setTable(table);
+            reservation.setDate(request.getDate());
+            reservation.setSlotStartTime(startTime);
+            reservationRepository.save(reservation);
         }
-
-        Optional<User> currentUser = userRepository.findByUsername(request.getUsername());
-
-        if (currentUser.isPresent()) {
-            for (LocalTime startTime : request.getSlotStartTimes()) {
-                Reservation reservation = new Reservation();
-                reservation.setUser(currentUser.get());
-                reservation.setTable(table);
-                reservation.setDate(request.getDate());
-                reservation.setSlotStartTime(startTime);
-                reservationRepository.save(reservation);
-            }
-            return "Reservation created successfully";
-        } else {
-            return "Error getting user";
-        }        
-    }
-
-    private boolean isSlotAvailable(List<Reservation> reservations, LocalTime startTime) {
-        for (Reservation reservation : reservations) {
-            if (reservation.getSlotStartTime().equals(startTime)) {
-                return false; 
-            }
-        }
-        return true;
     }
 }

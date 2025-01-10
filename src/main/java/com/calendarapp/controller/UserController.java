@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.calendarapp.auth.JwtService;
 import com.calendarapp.model.User;
 import com.calendarapp.service.UserService;
 
@@ -18,11 +17,9 @@ import com.calendarapp.service.UserService;
 public class UserController {
 
     private final UserService userService;
-    private final JwtService jwtService;
 
-    public UserController(UserService userService, JwtService jwtService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -30,21 +27,21 @@ public class UserController {
         try {
             userService.registerUser(user);
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
-        boolean isValid = userService.validateUserCredentials(user.getUsername(), user.getPassword());
-        if (isValid) {
-            String token = jwtService.generateToken(user.getUsername());
+        try {
+            String token = userService.loginUser(user);
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
-         return ResponseEntity.ok(response); 
-        } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
+            return ResponseEntity.ok(response); 
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(e.getMessage());
         }
+        
     }
 }

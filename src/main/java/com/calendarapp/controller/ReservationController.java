@@ -1,8 +1,6 @@
 package com.calendarapp.controller;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +33,7 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<String> createReservation(
             @RequestBody ReservationRequest request) {
-        String response = reservationService.createReservation(request);
-        return ResponseEntity.ok(response);
+        reservationService.createReservation(request);
+        return ResponseEntity.ok().build();
     }
 }
