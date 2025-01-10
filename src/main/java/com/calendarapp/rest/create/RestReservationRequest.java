@@ -1,4 +1,4 @@
-package com.calendarapp.rest;
+package com.calendarapp.rest.create;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ReservationRequest {
+public class RestReservationRequest {
     private String username;
     private Long tableId;
     private LocalDate date;

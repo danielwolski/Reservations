@@ -3,6 +3,7 @@ package com.calendarapp.service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -14,10 +15,11 @@ import com.calendarapp.repository.ReservationRepository;
 import com.calendarapp.repository.TableRepository;
 import com.calendarapp.validator.ReservationValidator;
 import com.calendarapp.validator.UserValidator;
-import com.calendarapp.rest.DailyReservations;
-import com.calendarapp.rest.ReservationRequest;
-import com.calendarapp.rest.ReservationSlot;
-import com.calendarapp.rest.TableReservationSlots;
+import com.calendarapp.rest.byday.RestDailyReservations;
+import com.calendarapp.rest.byday.RestReservationSlot;
+import com.calendarapp.rest.byday.RestTableReservationSlots;
+import com.calendarapp.rest.byuser.RestReservation;
+import com.calendarapp.rest.create.RestReservationRequest;
 
 
 @Service
@@ -43,20 +45,20 @@ public class ReservationService {
         this.userValidator = userValidator;
     }
 
-    public DailyReservations getSlots(LocalDate date) {
+    public RestDailyReservations getSlots(LocalDate date) {
         List<Table> tables = tableRepository.findAll();
-        DailyReservations dailyReservations = new DailyReservations();
+        RestDailyReservations dailyReservations = new RestDailyReservations();
         dailyReservations.setDate(date.toString());
 
-        List<TableReservationSlots> tableReservationSlotsList = new ArrayList<>();
+        List<RestTableReservationSlots> tableReservationSlotsList = new ArrayList<>();
 
         List<Reservation> reservations = reservationRepository.findByDate(date);
 
         for (Table table : tables) {
-            TableReservationSlots tableReservationSlots = new TableReservationSlots();
+            RestTableReservationSlots tableReservationSlots = new RestTableReservationSlots();
             tableReservationSlots.setTableId(table.getId().intValue());
 
-            List<ReservationSlot> reservationSlots = new ArrayList<>();
+            List<RestReservationSlot> reservationSlots = new ArrayList<>();
 
             for (int hour = DAY_START; hour < DAY_END; hour++) {
                 for (int minute = 0; minute < 60; minute += SLOT_SIZE_IN_MINUTES) {
@@ -71,7 +73,7 @@ public class ReservationService {
                         }
                     }
 
-                    ReservationSlot reservationSlot = new ReservationSlot();
+                    RestReservationSlot reservationSlot = new RestReservationSlot();
                     reservationSlot.setStartTime(slotStartTime.toString());
                     reservationSlot.setAvailable(isAvailable);
 
@@ -87,7 +89,7 @@ public class ReservationService {
     }
 
 
-    public void createReservation(ReservationRequest request) {   
+    public void createReservation(RestReservationRequest request) {   
         Table table = reservationValidator.validateAndGetTable(request.getTableId());
         reservationValidator.validateSlotAvailability(request, table);
         reservationValidator.validateSlot(request.getSlotStartTimes());
@@ -101,5 +103,47 @@ public class ReservationService {
             reservation.setSlotStartTime(startTime);
             reservationRepository.save(reservation);
         }
+    }
+
+    public List<RestReservation> getSlotsByUser(String username) {
+        List<Reservation> userReservations = reservationRepository.findByUsername(username);
+    
+        userReservations.sort(Comparator.comparing(Reservation::getDate)
+                                         .thenComparing(Reservation::getSlotStartTime));
+    
+        List<RestReservation> restReservations = new ArrayList<>();
+        Reservation sequenceStart = null;
+        Reservation current = null;
+    
+        for (Reservation reservation : userReservations) {
+            if (current == null) {
+                sequenceStart = reservation;
+                current = reservation;
+            } else {
+                if (current.getDate().equals(reservation.getDate()) &&
+                    current.getSlotStartTime().plusMinutes(SLOT_SIZE_IN_MINUTES).equals(reservation.getSlotStartTime())) {
+                    current = reservation;
+                } else {
+                    restReservations.add(mapToRestReservation(sequenceStart, current));
+                    sequenceStart = reservation;
+                    current = reservation;
+                }
+            }
+        }
+    
+        if (sequenceStart != null && current != null) {
+            restReservations.add(mapToRestReservation(sequenceStart, current));
+        }
+    
+        return restReservations;
+    }
+    
+    private RestReservation mapToRestReservation(Reservation start, Reservation end) {
+        RestReservation restReservation = new RestReservation();
+        restReservation.setDate(start.getDate().toString());
+        restReservation.setStartTime(start.getSlotStartTime().toString());
+        restReservation.setEndTime(end.getSlotStartTime().plusMinutes(SLOT_SIZE_IN_MINUTES).toString());
+        restReservation.setTableId(start.getTable().getId().intValue());
+        return restReservation;
     }
 }

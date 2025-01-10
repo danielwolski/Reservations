@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private loginUrl = 'http://localhost:8080/api/users/login';
   private registerUrl = 'http://localhost:8080/api/users/register';
-  private logoutUrl = 'http://localhost:8080/api/users/logout';
+  // private logoutUrl = 'http://localhost:8080/api/users/logout';
 
   constructor(private http: HttpClient) { }
 

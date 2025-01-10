@@ -1,6 +1,7 @@
 package com.calendarapp.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.calendarapp.rest.DailyReservations;
-import com.calendarapp.rest.ReservationRequest;
+import com.calendarapp.rest.byday.RestDailyReservations;
+import com.calendarapp.rest.byuser.RestReservation;
+import com.calendarapp.rest.create.RestReservationRequest;
 import com.calendarapp.service.ReservationService;
 
 @RestController
@@ -24,21 +26,20 @@ public class ReservationController {
     }
 
     @GetMapping("/{date}")
-    public ResponseEntity<DailyReservations> getSlots(@PathVariable("date") String date) {
+    public ResponseEntity<RestDailyReservations> getSlots(@PathVariable("date") String date) {
         LocalDate reservationDate = LocalDate.parse(date);
-        DailyReservations availability = reservationService.getSlots(reservationDate);
+        RestDailyReservations availability = reservationService.getSlots(reservationDate);
         return ResponseEntity.ok(availability);
     }
 
-    @GetMapping("/{date}")
-    public ResponseEntity<DailyReservations> getReservationsByUser(@PathVariable("date") String date) {
-        LocalDate reservationDate = LocalDate.parse(date);
-        DailyReservations availability = reservationService.getSlots(reservationDate);
-        return ResponseEntity.ok(availability);
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<RestReservation>> getReservationsByUser(@PathVariable("username") String username) {
+        List<RestReservation> userReservations = reservationService.getSlotsByUser(username);
+        return ResponseEntity.ok(userReservations);
     }
 
     @PostMapping
-    public ResponseEntity<?> createReservation(@RequestBody ReservationRequest request) {
+    public ResponseEntity<?> createReservation(@RequestBody RestReservationRequest request) {
         try {
             reservationService.createReservation(request);
             return ResponseEntity.ok().build(); 

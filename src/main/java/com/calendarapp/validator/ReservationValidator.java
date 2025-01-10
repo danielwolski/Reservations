@@ -10,7 +10,7 @@ import com.calendarapp.model.Reservation;
 import com.calendarapp.model.Table;
 import com.calendarapp.repository.ReservationRepository;
 import com.calendarapp.repository.TableRepository;
-import com.calendarapp.rest.ReservationRequest;
+import com.calendarapp.rest.create.RestReservationRequest;
 
 import static  com.calendarapp.service.ReservationService.SLOT_SIZE_IN_MINUTES;
 
@@ -30,7 +30,7 @@ public class ReservationValidator {
                 .orElseThrow(() -> new ReservationException("Table not found with ID: " + tableId));
     }
 
-    public void validateSlotAvailability(ReservationRequest request, Table table) {
+    public void validateSlotAvailability(RestReservationRequest request, Table table) {
         List<Reservation> existingReservations = reservationRepository.findReservationsByDateAndTable(request.getDate(), table);
         for (LocalTime startTime : request.getSlotStartTimes()) {
             if (!isSlotAvailable(existingReservations, startTime)) {
