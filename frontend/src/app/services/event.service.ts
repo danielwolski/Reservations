@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, Observable, of, Subject, tap } from 'rxjs';
-import { CreateReservation, DailyReservations } from '../models/event.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable, Subject, tap } from 'rxjs';
+import { CreateReservation, DailyReservations, UserReservations } from '../models/event.model';
 import { AuthService } from '../authorization/auth.service';
 
 @Injectable({
@@ -23,6 +23,10 @@ export class ReservationService {
     } else {
       return null;
     }
+  }
+
+  getUserReservations(username: string): Observable<UserReservations[]> {
+      return this.http.get<UserReservations[]>(`${this.apiUrl}/user/${username}`);
   }
 
   addReservation(request: CreateReservation, date: string): Observable<CreateReservation> {

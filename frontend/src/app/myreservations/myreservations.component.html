@@ -1,1 +1,31 @@
-<p>myreservations works!</p>
+<div class="reservations-container">
+    <h2>Your reservations</h2>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <table *ngIf="reservations.length > 0" class="reservations-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Table number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reservation of reservations">
+          <td>{{ reservation.date }}</td>
+          <td>{{ reservation.startTime }}</td>
+          <td>{{ reservation.endTime }}</td>
+          <td>{{ reservation.tableId }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <p *ngIf="reservations.length === 0 && !errorMessage">
+      There is reservations
+    </p>
+  </div>
+  

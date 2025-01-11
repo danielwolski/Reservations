@@ -19,3 +19,10 @@ export interface CreateReservation {
     date: string;
     slotStartTimes: string[];
 }
+
+export interface UserReservations {
+  date: string;
+  startTime: string;
+  endTime: string;
+  tableId: number;
+}
