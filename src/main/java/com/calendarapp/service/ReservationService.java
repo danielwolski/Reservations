@@ -89,10 +89,8 @@ public class ReservationService {
     }
 
 
-    public void createReservation(RestReservationRequest request) {   
-        Table table = reservationValidator.validateAndGetTable(request.getTableId());
-        reservationValidator.validateSlotAvailability(request, table);
-        reservationValidator.validateSlot(request.getSlotStartTimes());
+    public void createReservation(RestReservationRequest request) {
+        Table table = reservationValidator.validate(request);
         User currentUser = userValidator.validateAndGetUser(request.getUsername());
     
         for (LocalTime startTime : request.getSlotStartTimes()) {
@@ -104,9 +102,10 @@ public class ReservationService {
             reservationRepository.save(reservation);
         }
     }
+    
 
     public List<RestReservation> getSlotsByUser(String username) {
-        List<Reservation> userReservations = reservationRepository.findByUsername(username);
+        List<Reservation> userReservations = reservationRepository.findByUser_Username(username);
     
         userReservations.sort(Comparator.comparing(Reservation::getDate)
                                          .thenComparing(Reservation::getSlotStartTime));

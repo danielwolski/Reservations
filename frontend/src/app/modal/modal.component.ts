@@ -22,6 +22,7 @@ export class ModalComponent implements OnInit, OnChanges {
   reservations: DailyReservations | undefined;
   isAddEventFormVisible: boolean = false;
   selectedSlots: { [tableId: number]: Set<string> } = {};
+  selectedTableId: number | null = null;
 
   constructor(private eventService: ReservationService
   ) {}
@@ -39,22 +40,32 @@ export class ModalComponent implements OnInit, OnChanges {
   }
 
   toggleSlotSelection(tableId: number, startTime: string): void {
+    if (this.selectedTableId && this.selectedTableId !== tableId) {
+      return;
+    }
+  
     if (!this.selectedSlots[tableId]) {
       this.selectedSlots[tableId] = new Set<string>();
     }
   
     if (this.selectedSlots[tableId].has(startTime)) {
       this.selectedSlots[tableId].delete(startTime);
+  
+      if (this.selectedSlots[tableId].size === 0) {
+        delete this.selectedSlots[tableId];
+        this.selectedTableId = null;
+      }
     } else {
       this.selectedSlots[tableId].add(startTime);
+      this.selectedTableId = tableId;
     }
-  
-    console.log('Selected slots:', this.selectedSlots);
   }
+  
 
   close(): void {
     this.closeModal.emit();
     this.selectedSlots = {};
+    this.selectedTableId = null;
     this.errorMessage = '';
   }
 
@@ -90,6 +101,7 @@ export class ModalComponent implements OnInit, OnChanges {
     }
     
     this.selectedSlots = {};
+    this.selectedTableId = null;
   }
   
 
