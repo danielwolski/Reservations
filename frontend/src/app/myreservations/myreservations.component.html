@@ -12,6 +12,7 @@
           <th>From</th>
           <th>To</th>
           <th>Table number</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -20,12 +21,13 @@
           <td>{{ reservation.startTime }}</td>
           <td>{{ reservation.endTime }}</td>
           <td>{{ reservation.tableId }}</td>
+          <button (click)="cancelReservation(reservation)">Remove</button>
         </tr>
       </tbody>
     </table>
   
     <p *ngIf="reservations.length === 0 && !errorMessage">
-      There is reservations
+      There are no reservations
     </p>
   </div>
   

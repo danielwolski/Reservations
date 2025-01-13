@@ -40,8 +40,8 @@ export class ReservationService {
     return this.http.post<any>(this.apiUrl, reservationRequestToSend);
   }
 
-  removeEvent(eventId: number): Observable<void> {
-    const url = `${this.apiUrl}/${eventId}`;
+  cancelReservation(slotIds: number[]): Observable<void> {
+    const url = `${this.apiUrl}/${slotIds}`;
     return this.http.delete<void>(url).pipe(
       tap(() => this.reservationsUpdatedSubject.next())
     );

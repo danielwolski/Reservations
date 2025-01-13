@@ -21,6 +21,7 @@ export interface CreateReservation {
 }
 
 export interface UserReservations {
+  slotsIds: number[];
   date: string;
   startTime: string;
   endTime: string;

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UserReservations } from '../models/event.model';
 import { ReservationService } from '../services/event.service';
 import { CommonModule } from '@angular/common';
@@ -9,9 +10,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './myreservations.component.html',
   styleUrls: ['./myreservations.component.css']
 })
-export class MyReservationsComponent implements OnInit {
+export class MyReservationsComponent implements OnInit, OnDestroy {
   reservations: UserReservations[] = [];
   errorMessage: string | null = null;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private reservationService: ReservationService) {}
 
@@ -19,6 +21,12 @@ export class MyReservationsComponent implements OnInit {
     const username = localStorage.getItem('username');
     if (username) {
       this.getUserReservations(username);
+
+      this.subscriptions.add(
+        this.reservationService.reservationsUpdated$.subscribe(() => {
+          this.getUserReservations(username);
+        })
+      );
     }
   }
 
@@ -32,5 +40,20 @@ export class MyReservationsComponent implements OnInit {
         this.errorMessage = 'Error during getting user reservations: ' + err.error;
       }
     });
+  }
+
+  cancelReservation(reservation: UserReservations): void {
+    this.reservationService.cancelReservation(reservation.slotsIds).subscribe({
+      next: () => {
+        this.errorMessage = null;
+      },
+      error: (err) => {
+        this.errorMessage = 'Error during canceling reservation: ' + err.error;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
