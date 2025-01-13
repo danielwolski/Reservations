@@ -1,18 +1,18 @@
 <div class="app-container">
-    <div class="sidebar">
+    <div class="menubar">
       <ul class="menu">
         <li class="menu-item">
           <button 
             [class.active]="isActive('/events-list')"
             (click)="goToCalendar()">
-            <i class="icon-calendar"></i> Reserve a table
+            Reserve a table
           </button>
         </li>
         <li class="menu-item">
           <button 
             [class.active]="isActive('/myreservations')"
             (click)="goToMyReservations()">
-            <i class="icon-calendar"></i> My reservations
+            My reservations
           </button>
         </li>
       </ul>
@@ -20,7 +20,7 @@
         <li class="menu-item"> 
           <button 
             (click)="logout()">
-            <i class="icon-logout"></i> Logout
+            Logout
           </button>
         </li>
       </ul>

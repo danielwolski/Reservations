@@ -1,19 +1,18 @@
 .calendar {
   display: flex;
   flex-direction: column;
-  margin-left: 20%;
-  color: #333;
+  color: #3e8f3e;
   padding: 20px;
-  width: 100%;
-  left: 50%;
+  height: 100vh;
+  background-color: #343538;
 }
 
 .calendar-header {
   display: flex;
   justify-content: space-between;
-  margin-left: 25%;
   width: 100%;
   max-width: 400px;
+  margin: 0 auto;
   margin-bottom: 20px;
   align-items: center;
 }
@@ -21,14 +20,14 @@
 .current-month {
   font-size: 1.5rem;
   font-weight: bold;
-  color: rgb(75, 1, 248);
+  color: rgb(39, 168, 71);
 }
 
 .nav-button {
-  background: white;
-  color: rgb(75, 1, 248);
+  background: #343538;
+  color: rgb(39, 168, 71);
   cursor: pointer;
-  border: 1px solid #ddd;
+  border: 1px solid rgb(39, 168, 71);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -45,12 +44,13 @@
   grid-template-columns: repeat(7, 1fr);
   width: 100%;
   max-width: 400px;
+  margin: 0 30%;
 }
 
 .day-name {
   font-weight: bold;
   text-align: center;
-  color: rgb(75, 1, 248);
+  color: rgb(39, 168, 71);
   text-transform: uppercase;
 }
 
@@ -59,8 +59,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background: white;
-  border: 1px solid #ddd;
+  background: rgb(83, 79, 79);
+  border: 1px solid #140d0d;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -74,9 +74,9 @@
 }
 
 .day.today {
-  background: rgb(255, 255, 255);
-  color: rgb(75, 1, 248);
-  border-color: rgb(75, 1, 248);
+  background: rgb(114, 107, 107);
+  color: rgb(39, 168, 71);
+  border-color: rgb(39, 168, 71);
   border-width: 1px;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .event {
-  background: #ffffff;
+  background: #353333;
   color: rgb(0, 0, 0);
   font-size: 0.65rem;
   margin: 2px 0;

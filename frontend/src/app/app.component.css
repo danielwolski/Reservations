@@ -1,46 +1,53 @@
 .app-container {
     display: flex;
+    flex-direction: column;
     height: 100vh;
+    background: #4d4949;
 }
 
-.sidebar {
+.menubar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
-    width: 185px; 
-    background-color: rgb(238, 238, 238);
-    height: 100%; 
+    background-color: rgb(32, 158, 49);
+    height: auto;
+    padding: 10px 15px;
 }
 
 .menu-item button {
-    background: rgb(238, 238, 238);
-    color: rgb(75, 1, 248);
+    background: #4d4949;
+    color: rgb(32, 158, 49);
     cursor: pointer;
-    border: 1px solid #ddd;
+    border: 1px solid #000000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    width: 183px;
     font-size: 18px;
-    text-align: left;
-    margin-left: -40px;
-  }
-  
+    text-align: center;
+    padding: 10px 15px;
+}
+
 .menu-item button:hover {
-    background: rgb(200, 200, 200);
+    background: rgb(114, 107, 107);
 }
 
 .menu-item button.active {
-    background: rgb(150, 150, 150);
+    background: #353333;
     font-weight: bold;
 }
-  
+
 .menu {
+    display: flex;
     list-style-type: none;
     margin: 0;
+    padding: 0;
+    gap: 10px;
 }
-  
+
 .logout-menu {
+    display: flex;
     list-style-type: none;
-    margin-bottom: 30px;
+    margin: 0;
+    padding: 0;
+    gap: 50px;
 }

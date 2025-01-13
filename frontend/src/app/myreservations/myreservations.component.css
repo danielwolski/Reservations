@@ -1,11 +1,17 @@
 .reservations-container {
   padding: 20px;
   font-family: Arial, sans-serif;
+  background-color: #343538;
+  height: 100vh;
 }
 
 h2 {
   text-align: center;
-  color: #333;
+  color: rgb(39, 168, 71);
+}
+
+.info {
+  color: rgb(39, 168, 71);
 }
 
 .error-message {
@@ -19,18 +25,20 @@ h2 {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
+  color: rgb(83, 79, 79);
 }
 
 .reservations-table th,
 .reservations-table td {
-  border: 1px solid #ddd;
+  border: 1px solid rgb(83, 79, 79);
   padding: 8px;
   text-align: center;
   vertical-align: middle;
+  color: rgb(39, 168, 71);
 }
 
 .reservations-table th {
-  background-color: #f2f2f2;
+  background-color: rgb(83, 79, 79);
   font-weight: bold;
 }
 
