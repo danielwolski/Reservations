@@ -57,6 +57,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' 
     implementation 'org.springframework.security:spring-security-oauth2-jose'
+
+	implementation 'org.simplejavamail:simple-java-mail:8.12.4'
+
 }
 
 tasks.named('test') {

@@ -5,17 +5,21 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.calendarapp.exception.ReservationException;
 import com.calendarapp.model.Reservation;
 import com.calendarapp.model.Table;
 import com.calendarapp.model.User;
 import com.calendarapp.repository.ReservationRepository;
 import com.calendarapp.repository.TableRepository;
+import com.calendarapp.repository.UserRepository;
 import com.calendarapp.validator.ReservationValidator;
 import com.calendarapp.validator.UserValidator;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.calendarapp.rest.byday.RestDailyReservations;
@@ -26,6 +30,7 @@ import com.calendarapp.rest.create.RestReservationRequest;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class ReservationService {
     public final static int SLOT_SIZE_IN_MINUTES = 30;
     
@@ -33,20 +38,12 @@ public class ReservationService {
     private final static int DAY_END = 22;
 
     private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
     private final TableRepository tableRepository;
 
     private final ReservationValidator reservationValidator;
     private final UserValidator userValidator;
-
-    public ReservationService(ReservationRepository reservationRepository,
-                              TableRepository tableRepository,
-                              ReservationValidator reservationValidator,
-                              UserValidator userValidator) {
-        this.reservationRepository = reservationRepository;
-        this.tableRepository = tableRepository;
-        this.reservationValidator = reservationValidator;
-        this.userValidator = userValidator;
-    }
+    private final EmailSender emailSender;
 
     public RestDailyReservations getSlots(LocalDate date) {
         log.info("Fetching reservation slots for date: {}", date);
@@ -108,6 +105,8 @@ public class ReservationService {
             reservationRepository.save(reservation);
             log.info("Reservation created for user: {}, table ID: {}, start time: {}", request.getUsername(), table.getId(), startTime);
         }
+        emailSender.sendEmail("You have succesfully booked table " + table.getId() + " at our restaurant on " + request.getDate(), 
+                              getEmailByUsername(request.getUsername()));
     }
 
     public void cancelReservation(List<Long> slotIds) {
@@ -164,5 +163,11 @@ public class ReservationService {
         restReservation.setTableId(start.getTable().getId().intValue());
         restReservation.setSlotsIds(reservationIds);
         return restReservation;
+    }
+
+    private String getEmailByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new ReservationException("No such user with username: " + username))
+            .getEmail();
     }
 }

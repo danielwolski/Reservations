@@ -21,7 +21,9 @@
           <td>{{ reservation.startTime }}</td>
           <td>{{ reservation.endTime }}</td>
           <td>{{ reservation.tableId }}</td>
-          <button (click)="cancelReservation(reservation)">Remove</button>
+          <td>
+            <button class="cancel-button" (click)="cancelReservation(reservation)">Remove</button>
+          </td>
         </tr>
       </tbody>
     </table>

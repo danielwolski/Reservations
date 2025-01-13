@@ -7,12 +7,15 @@ import org.springframework.stereotype.Component;
 import com.calendarapp.model.Table;
 import com.calendarapp.repository.TableRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class DataInitializer implements CommandLineRunner {
 
     private final TableRepository tableRepository;
 
-    private static final int NUMBER_OF_TABLES = 10;
+    private static final int NUMBER_OF_TABLES = 4;
 
     @Autowired
     public DataInitializer(TableRepository tableRepository) {
@@ -27,9 +30,9 @@ public class DataInitializer implements CommandLineRunner {
                 table.setNumber(i);
                 tableRepository.save(table);
             }
-            System.out.println("10 tables added to database");
+            log.info(NUMBER_OF_TABLES + " tables added to database");
         } else {
-            System.out.println("Table 'restaurant table' is not empty. Omitting data initializaiton.");
+            log.info("Table 'restaurant table' is not empty. Omitting data initialization.");
         }
     }
 }
