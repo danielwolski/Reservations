@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.calendarapp.email.EmailSender;
 import com.calendarapp.exception.ReservationException;
 import com.calendarapp.model.Reservation;
 import com.calendarapp.model.Table;

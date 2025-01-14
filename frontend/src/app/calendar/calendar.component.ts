@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservationService } from '../services/event.service';
-import { ModalComponent } from '../modal/modal.component';
+import { TableReservationComponent } from '../tablereservation/tablereservation.component';
 
 @Component({
   selector: 'app-calendar',
@@ -9,7 +9,7 @@ import { ModalComponent } from '../modal/modal.component';
   styleUrls: ['./calendar.component.css'],
   imports: [
     CommonModule, 
-    ModalComponent],
+    TableReservationComponent],
   standalone: true
 })
 export class CalendarComponent implements OnInit {

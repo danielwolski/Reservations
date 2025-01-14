@@ -1,4 +1,4 @@
-package com.calendarapp.service;
+package com.calendarapp.email;
 
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;

@@ -4,15 +4,15 @@ import { ReservationService } from '../services/event.service';
 import { CreateReservation, DailyReservations } from '../models/event.model';
 
 @Component({
-  selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css'],
+  selector: 'app-tablereservation',
+  templateUrl: './tablereservation.component.html',
+  styleUrls: ['./tablereservation.component.css'],
   imports: [
     CommonModule
   ],
   standalone: true
 })
-export class ModalComponent implements OnInit, OnChanges {
+export class TableReservationComponent implements OnInit, OnChanges {
   @Input() isVisible: boolean = false; 
   @Input() selectedDate: string = '';  
   @Output() closeModal: EventEmitter<void> = new EventEmitter(); 
