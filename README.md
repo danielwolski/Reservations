@@ -1,15 +1,26 @@
 # Restaurant Table Reservations
 
+![](https://github.com/danielwolski/Reservations/blob/main/ApplicationPresentation.gif)
+<br></br>
 # Stack
+
 * **Language:** Java
 * **Framework:** Spring Boot
 * **Database:** PostgreSQL, JPA
 * **Build tool:** Gradle
+<br></br>
 
-# Local installation and setup
+* **Frontend:** Angular
+
+After following the steps below and running the application, you must register and log in to make a reservation. The reservation confirmation will be sent to the email used during registration.
+
+<br></br>
+# Backend
+
+## Local installation and setup
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/danielwolski/Reservations-WIP.git
+git clone https://github.com/danielwolski/Reservations.git
 ```
 2. **Start PostgreSQL in Docker:**
 
@@ -33,7 +44,23 @@ to your PostgreSQL docker image name.
 ./gradlew build
 ./gradlew bootRun
 ```
+<br></br>
+# Frontend
 
+## Installation and setup
+
+1. **Build and run the project:**
+```bash
+npm install
+npm start
+```
+
+2. **Default address:**
+```
+http://localhost:4200
+```
+
+<br></br>
 # Additional resources:
 **Gradle installation**
 ```
