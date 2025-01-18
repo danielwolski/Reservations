@@ -22,7 +22,7 @@ export class LoginComponent {
       next: response => {
         this.authService.saveToken(response.token);
         this.authService.saveUsername(this.username);
-        this.router.navigate(['/events-list']);
+        this.router.navigate(['/calendar']);
       },
       error: err => {
         this.username = '';

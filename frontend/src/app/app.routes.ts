@@ -7,7 +7,7 @@ import { MyReservationsComponent } from './myreservations/myreservations.compone
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'events-list', component: CalendarComponent, canActivate: [AuthGuard] },
+  { path: 'calendar', component: CalendarComponent, canActivate: [AuthGuard] },
   { path: 'myreservations', component: MyReservationsComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },

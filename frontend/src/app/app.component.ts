@@ -14,7 +14,7 @@ export class AppComponent {
   constructor(private router: Router, private authService: AuthService) {}
 
   goToCalendar() {
-    this.router.navigate(['/events-list']);
+    this.router.navigate(['/calendar']);
   }
 
   goToMyReservations() {
